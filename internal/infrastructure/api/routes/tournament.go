@@ -64,7 +64,7 @@ func (h *tournamentHandler) ParticipatedTournaments(c echo.Context) error {
 //	@Tags			tournaments
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	views.HostedTournamentsResponse
+//	@Success		200	{object}	views.GetTournamentsResponse
 //	@Router			/tournaments [get]
 func (h *tournamentHandler) GetTournaments(c echo.Context) error {
 	ctx := c.Request().Context()

@@ -1,33 +1,5 @@
 basePath: /api/v1
 definitions:
-  controllers.GuestUserInfo:
-    properties:
-      username:
-        type: string
-    type: object
-  controllers.TournamentInfo:
-    properties:
-      date:
-        type: string
-      title:
-        type: string
-    type: object
-  controllers.UserInfo:
-    properties:
-      id:
-        type: string
-      username:
-        type: string
-    type: object
-  views.AddUserResponse:
-    type: object
-  views.EnrollGuestPlayerResponse:
-    properties:
-      id:
-        type: string
-    type: object
-  views.EnrollPlayerResponse:
-    type: object
   views.GetPlayersResponse:
     properties:
       players:
@@ -40,6 +12,13 @@ definitions:
       tournament:
         $ref: '#/definitions/views.Tournament'
     type: object
+  views.GetTournamentsResponse:
+    properties:
+      tournaments:
+        items:
+          $ref: '#/definitions/views.TournamentPreview'
+        type: array
+    type: object
   views.Host:
     properties:
       id:
@@ -49,12 +28,7 @@ definitions:
       username:
         type: string
     type: object
-  views.HostTournamentResponse:
-    properties:
-      id:
-        type: string
-    type: object
-  views.HostedTournamentsResponse:
+  views.ParticipatedTournamentsResponse:
     properties:
       tournaments:
         items:
@@ -71,8 +45,6 @@ definitions:
         type: string
       username:
         type: string
-    type: object
-  views.SelfEnrollResponse:
     type: object
   views.Tournament:
     properties:
@@ -102,11 +74,11 @@ definitions:
       total_players:
         type: integer
     type: object
-host: 127.0.0.1:30001
+host: 127.0.0.1:30002
 info:
   contact: {}
-  description: Service for managing lifecycle of the tournaments
-  title: Tournament Management Service
+  description: Service for viewing participation in tournaments
+  title: Tournament Participation Service
   version: 1.0.0
 paths:
   /tournaments:
@@ -120,34 +92,8 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/views.HostedTournamentsResponse'
+            $ref: '#/definitions/views.GetTournamentsResponse'
       summary: Get Tournaments
-      tags:
-      - tournaments
-    post:
-      consumes:
-      - application/json
-      description: host tournament by authorized player
-      parameters:
-      - description: Authorization info
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: Tournament info
-        in: body
-        name: tournament_info
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.TournamentInfo'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/views.HostTournamentResponse'
-      summary: Host Tournament
       tags:
       - tournaments
   /tournaments/{id}:
@@ -174,32 +120,6 @@ paths:
           schema:
             $ref: '#/definitions/views.GetTournamentResponse'
       summary: Get Tournament
-      tags:
-      - tournaments
-  /tournaments/{id}/enroll:
-    post:
-      consumes:
-      - application/json
-      description: enroll self to the tournament
-      parameters:
-      - description: Authorization info
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: ID of the tournament
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/views.SelfEnrollResponse'
-      summary: Self Enroll
       tags:
       - tournaments
   /tournaments/{id}/players:
@@ -229,75 +149,11 @@ paths:
       tags:
       - tournaments
       - players
-    post:
-      consumes:
-      - application/json
-      description: enroll a player that isn't a registered user
-      parameters:
-      - description: Authorization info
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: ID of the tournament
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Guest info
-        in: body
-        name: user_info
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.GuestUserInfo'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/views.EnrollGuestPlayerResponse'
-      summary: Enroll Guest Player
-      tags:
-      - tournaments
-      - players
-  /tournaments/{id}/players/{user_id}:
-    put:
-      consumes:
-      - application/json
-      description: enroll a player that is a registered user
-      parameters:
-      - description: Authorization info
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: ID of the tournament
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: ID of the user to be added
-        in: path
-        name: user_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/views.EnrollPlayerResponse'
-      summary: Enroll Player
-      tags:
-      - tournaments
-      - players
   /user/tournaments:
     get:
       consumes:
       - application/json
-      description: get all tournaments hosted by authorized user
+      description: get all tournaments participated by authorized user
       parameters:
       - description: Authorization info
         in: header
@@ -310,30 +166,8 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/views.HostedTournamentsResponse'
-      summary: Hosted Tournaments
+            $ref: '#/definitions/views.ParticipatedTournamentsResponse'
+      summary: Participated Tournaments
       tags:
       - tournaments
-  /users:
-    post:
-      consumes:
-      - application/json
-      description: notify that user was registered
-      parameters:
-      - description: User info
-        in: body
-        name: user_info
-        required: true
-        schema:
-          $ref: '#/definitions/controllers.UserInfo'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/views.AddUserResponse'
-      summary: Add User
-      tags:
-      - user
 swagger: "2.0"

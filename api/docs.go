@@ -32,46 +32,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/views.HostedTournamentsResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "host tournament by authorized player",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "tournaments"
-                ],
-                "summary": "Host Tournament",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization info",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "Tournament info",
-                        "name": "tournament_info",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.TournamentInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/views.HostTournamentResponse"
+                            "$ref": "#/definitions/views.GetTournamentsResponse"
                         }
                     }
                 }
@@ -116,45 +77,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/tournaments/{id}/enroll": {
-            "post": {
-                "description": "enroll self to the tournament",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "tournaments"
-                ],
-                "summary": "Self Enroll",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization info",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "ID of the tournament",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/views.SelfEnrollResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/tournaments/{id}/players": {
             "get": {
                 "description": "get players for tournament",
@@ -193,105 +115,11 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "enroll a player that isn't a registered user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "tournaments",
-                    "players"
-                ],
-                "summary": "Enroll Guest Player",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization info",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "ID of the tournament",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Guest info",
-                        "name": "user_info",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.GuestUserInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/views.EnrollGuestPlayerResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/tournaments/{id}/players/{user_id}": {
-            "put": {
-                "description": "enroll a player that is a registered user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "tournaments",
-                    "players"
-                ],
-                "summary": "Enroll Player",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization info",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "ID of the tournament",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "ID of the user to be added",
-                        "name": "user_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/views.EnrollPlayerResponse"
-                        }
-                    }
-                }
             }
         },
         "/user/tournaments": {
             "get": {
-                "description": "get all tournaments hosted by authorized user",
+                "description": "get all tournaments participated by authorized user",
                 "consumes": [
                     "application/json"
                 ],
@@ -301,7 +129,7 @@ const docTemplate = `{
                 "tags": [
                     "tournaments"
                 ],
-                "summary": "Hosted Tournaments",
+                "summary": "Participated Tournaments",
                 "parameters": [
                     {
                         "type": "string",
@@ -315,41 +143,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/views.HostedTournamentsResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/users": {
-            "post": {
-                "description": "notify that user was registered",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "Add User",
-                "parameters": [
-                    {
-                        "description": "User info",
-                        "name": "user_info",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.UserInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/views.AddUserResponse"
+                            "$ref": "#/definitions/views.ParticipatedTournamentsResponse"
                         }
                     }
                 }
@@ -357,50 +151,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.GuestUserInfo": {
-            "type": "object",
-            "properties": {
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.TournamentInfo": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.UserInfo": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "views.AddUserResponse": {
-            "type": "object"
-        },
-        "views.EnrollGuestPlayerResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
-        "views.EnrollPlayerResponse": {
-            "type": "object"
-        },
         "views.GetPlayersResponse": {
             "type": "object",
             "properties": {
@@ -420,6 +170,17 @@ const docTemplate = `{
                 }
             }
         },
+        "views.GetTournamentsResponse": {
+            "type": "object",
+            "properties": {
+                "tournaments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/views.TournamentPreview"
+                    }
+                }
+            }
+        },
         "views.Host": {
             "type": "object",
             "properties": {
@@ -434,15 +195,7 @@ const docTemplate = `{
                 }
             }
         },
-        "views.HostTournamentResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
-        "views.HostedTournamentsResponse": {
+        "views.ParticipatedTournamentsResponse": {
             "type": "object",
             "properties": {
                 "tournaments": {
@@ -469,9 +222,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "views.SelfEnrollResponse": {
-            "type": "object"
         },
         "views.Tournament": {
             "type": "object",
@@ -522,11 +272,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0.0",
-	Host:             "127.0.0.1:30001",
+	Host:             "127.0.0.1:30002",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "Tournament Management Service",
-	Description:      "Service for managing lifecycle of the tournaments",
+	Title:            "Tournament Participation Service",
+	Description:      "Service for viewing participation in tournaments",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
