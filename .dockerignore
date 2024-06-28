@@ -1,0 +1,9 @@
+# Exclude all files
+**
+
+# Add only required files
+!api/
+!cmd/
+!internal/
+!go.mod
+!go.sum
