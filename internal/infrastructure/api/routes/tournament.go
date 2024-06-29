@@ -37,22 +37,22 @@ func (h *tournamentHandler) ParticipatedTournaments(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, views.ErrorResponse{})
 	}
 
-	tt := make([]*views.TournamentPreview, 0, len(tournaments))
-	for _, tot := range tournaments {
-		tt = append(tt, &views.TournamentPreview{
-			ID:    tot.ID,
-			Title: tot.Title,
+	tournamentViews := make([]*views.TournamentPreview, 0, len(tournaments))
+	for _, tournament := range tournaments {
+		tournamentViews = append(tournamentViews, &views.TournamentPreview{
+			ID:    tournament.ID,
+			Title: tournament.Title,
 			Host: &views.Host{
-				ID:       tot.Host.ID,
-				UserID:   tot.Host.UserID,
-				Username: tot.Host.Username,
+				ID:       tournament.Host.ID,
+				UserID:   tournament.Host.UserID,
+				Username: tournament.Host.Username,
 			},
-			Date:         tot.Date,
-			TotalPlayers: tot.TotalPlayers,
+			Date:         tournament.Date,
+			TotalPlayers: tournament.TotalPlayers,
 		})
 	}
 
-	resp := &views.ParticipatedTournamentsResponse{Tournaments: tt}
+	resp := &views.ParticipatedTournamentsResponse{Tournaments: tournamentViews}
 
 	return c.JSON(http.StatusOK, resp)
 }
@@ -74,22 +74,22 @@ func (h *tournamentHandler) GetTournaments(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, views.ErrorResponse{})
 	}
 
-	tt := make([]*views.TournamentPreview, 0, len(tournaments))
-	for _, tot := range tournaments {
-		tt = append(tt, &views.TournamentPreview{
-			ID:    tot.ID,
-			Title: tot.Title,
+	tournamentViews := make([]*views.TournamentPreview, 0, len(tournaments))
+	for _, tournament := range tournaments {
+		tournamentViews = append(tournamentViews, &views.TournamentPreview{
+			ID:    tournament.ID,
+			Title: tournament.Title,
 			Host: &views.Host{
-				ID:       tot.Host.ID,
-				UserID:   tot.Host.UserID,
-				Username: tot.Host.Username,
+				ID:       tournament.Host.ID,
+				UserID:   tournament.Host.UserID,
+				Username: tournament.Host.Username,
 			},
-			Date:         tot.Date,
-			TotalPlayers: tot.TotalPlayers,
+			Date:         tournament.Date,
+			TotalPlayers: tournament.TotalPlayers,
 		})
 	}
 
-	resp := &views.GetTournamentsResponse{Tournaments: tt}
+	resp := &views.GetTournamentsResponse{Tournaments: tournamentViews}
 
 	return c.JSON(http.StatusOK, resp)
 }
@@ -120,7 +120,7 @@ func (h *tournamentHandler) GetTournament(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, views.ErrorResponse{})
 	}
 
-	tt := &views.Tournament{
+	tournamentView := &views.Tournament{
 		ID:    tournament.ID,
 		Title: tournament.Title,
 		Host: &views.Host{
@@ -133,7 +133,7 @@ func (h *tournamentHandler) GetTournament(c echo.Context) error {
 		PlayerEnrolled: tournament.PlayerEnrolled,
 	}
 
-	resp := &views.GetTournamentResponse{Tournament: tt}
+	resp := &views.GetTournamentResponse{Tournament: tournamentView}
 
 	return c.JSON(http.StatusOK, resp)
 }
@@ -167,9 +167,9 @@ func (h *tournamentHandler) GetPlayers(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, views.ErrorResponse{})
 	}
 
-	pp := make([]*views.Player, 0, len(enrolledPlayers))
+	playerViews := make([]*views.Player, 0, len(enrolledPlayers))
 	for _, enrolledPlayer := range enrolledPlayers {
-		pp = append(pp, &views.Player{
+		playerViews = append(playerViews, &views.Player{
 			ID:       enrolledPlayer.ID,
 			UserID:   enrolledPlayer.UserID,
 			Username: enrolledPlayer.Username,
@@ -177,7 +177,7 @@ func (h *tournamentHandler) GetPlayers(c echo.Context) error {
 		})
 	}
 
-	resp := &views.GetPlayersResponse{Players: pp}
+	resp := &views.GetPlayersResponse{Players: playerViews}
 
 	return c.JSON(http.StatusOK, resp)
 }

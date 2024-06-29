@@ -46,9 +46,9 @@ func (r *playerQueryService) GetByTournamentID(ctx context.Context, tournamentID
 		return nil, fmt.Errorf("tournament not found: %w", err)
 	}
 
-	pleps := make([]*queries.Player, 0, len(tournamentModel.Players))
-	for _, ppp := range tournamentModel.Players {
-		f := bson.D{{"_id", ppp.PlayerID}}
+	players := make([]*queries.Player, 0, len(tournamentModel.Players))
+	for _, enrolledPlayer := range tournamentModel.Players {
+		f := bson.D{{"_id", enrolledPlayer.PlayerID}}
 		res := r.playerColl.FindOne(ctx, f)
 
 		var playerModel models.Player
@@ -56,13 +56,13 @@ func (r *playerQueryService) GetByTournamentID(ctx context.Context, tournamentID
 			return nil, fmt.Errorf("player not found: %w", err)
 		}
 
-		pleps = append(pleps, &queries.Player{
-			ID:       ppp.PlayerID.Hex(),
+		players = append(players, &queries.Player{
+			ID:       enrolledPlayer.PlayerID.Hex(),
 			UserID:   playerModel.UserID,
 			Username: playerModel.Username,
-			Dropped:  ppp.Dropped,
+			Dropped:  enrolledPlayer.Dropped,
 		})
 	}
 
-	return pleps, nil
+	return players, nil
 }
